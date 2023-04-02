@@ -1,7 +1,11 @@
 package Person;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 public class Person {
     private String name;
@@ -17,35 +21,49 @@ public class Person {
         this.format = format;
     }
 
-    public String Formatted(String data, String format) {
+    public String Formatted(String data, String format) throws ParseException {
         String str = null;
 
-        Calendar calendar = new GregorianCalendar();
-        switch (format) {
-            case "short":
-                for (int i = 0; i < data.length(); i++) {
-                    //System.out.println(data.substring(0, 2));
-                    str = data.substring(0, 5);
+        Calendar mydate = new GregorianCalendar();
+        Date thedate = new SimpleDateFormat("d.M.yyyy", Locale.ENGLISH).parse(this.data);
+        mydate.setTime(thedate); //breakdown
 
-                }
-                break;
+        NameMonths[] months = NameMonths.values();
 
-            case "default":
-                for (int i = 0; i < data.length(); i++) {
-                    //System.out.println(data.substring(0, 2));
-                    str = data;
+        System.out.println("mydate -> "+mydate);
+        System.out.println("year   -> "+mydate.get(Calendar.YEAR));
+        System.out.println("month  -> "+months[mydate.get(Calendar.MONTH)]);
+        System.out.println("dom    -> "+mydate.get(Calendar.DAY_OF_MONTH));
 
-                }
-                break;
-            case "full" :
-
-                break;
-        }
+//        switch (format) {
+//            case "short":
+//                for (int i = 0; i < data.length(); i++) {
+//                    //System.out.println(data.substring(0, 2));
+//                    str = data.substring(0, 5);
+//
+//                }
+//                break;
+//
+//            case "default":
+//                for (int i = 0; i < data.length(); i++) {
+//                    //System.out.println(data.substring(0, 2));
+//                    str = data;
+//
+//                }
+//                break;
+//            case "full" :
+//
+//                break;
+//        }
         return str;
     }
 
     @Override
     public String toString() {
-        return Formatted(data, format);
+        try {
+            return Formatted(this.data, this.format);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
