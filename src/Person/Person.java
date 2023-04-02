@@ -7,6 +7,10 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
+/**
+ * @author Andrey Tynyanyi
+ * @version 2.0
+ */
 public class Person {
     private String name;
     private String data;
