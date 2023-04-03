@@ -16,49 +16,57 @@ public class Person {
     private String data;
     private String format;
 
+    /**
+     * Констракт класса
+     * @param name - Имя
+     * @param data - дата в формате ДД.ММ.ГГГГ
+     */
     public Person(String name, String data) {
         this.name = name;
         this.data = data;
     }
 
+    /**
+     * Задаем формат в котором
+     * хотим получить дату
+     * @param format
+     */
     public void setFormat(String format) {
         this.format = format;
     }
 
+    /**
+     * Форматирует строку взависимоти от назначенного переданного формата
+     * @param data - дата в виде строки
+     * @param format - значение формата (short/medium/full)
+     * @return - возвращает строку с отформатированной датой
+     * @throws ParseException
+     */
     public String Formatted(String data, String format) throws ParseException {
         String str = null;
 
-        Calendar mydate = new GregorianCalendar();
-        Date thedate = new SimpleDateFormat("d.M.yyyy", Locale.ENGLISH).parse(this.data);
-        mydate.setTime(thedate); //breakdown
+        /**
+         * Парсим строку с датой,
+         * в дату с которой можно работать
+         */
+        Calendar myDate = new GregorianCalendar();
+        Date theDate = new SimpleDateFormat("d.M.yyyy", Locale.ENGLISH).parse(data);
+        myDate.setTime(theDate); //breakdown
 
-        NameMonths[] months = NameMonths.values();
-
-        System.out.println("mydate -> "+mydate);
-        System.out.println("year   -> "+mydate.get(Calendar.YEAR));
-        System.out.println("month  -> "+months[mydate.get(Calendar.MONTH)]);
-        System.out.println("dom    -> "+mydate.get(Calendar.DAY_OF_MONTH));
-
-//        switch (format) {
-//            case "short":
-//                for (int i = 0; i < data.length(); i++) {
-//                    //System.out.println(data.substring(0, 2));
-//                    str = data.substring(0, 5);
-//
-//                }
-//                break;
-//
-//            case "default":
-//                for (int i = 0; i < data.length(); i++) {
-//                    //System.out.println(data.substring(0, 2));
-//                    str = data;
-//
-//                }
-//                break;
-//            case "full" :
-//
-//                break;
-//        }
+        switch (format) {
+            case "short" -> {
+                SimpleDateFormat shortYear = new SimpleDateFormat("dd.M.yy", Locale.ENGLISH);
+                str = String.format("%s", shortYear.format(myDate.getTime()));
+            }
+            case "medium" -> {
+                SimpleDateFormat mediumYear = new SimpleDateFormat("dd.M.yyyy", Locale.ENGLISH);
+                str = String.format("%s", mediumYear.format(myDate.getTime()));
+            }
+            case "long" -> {
+                NameMonths[] months = NameMonths.values(); //объект с русскими названиями месяцев
+                str = String.format("%s %s %s", myDate.get(Calendar.DAY_OF_MONTH), months[myDate.get(Calendar.MONTH)], myDate.get(Calendar.YEAR));
+            }
+        }
         return str;
     }
 
