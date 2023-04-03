@@ -24,42 +24,83 @@ public class Main {
         System.out.println(uniqueWordAllStrings);
 
         System.out.println("Слова входят и в первую, и во вторую строку");
-        System.out.println(includedInFirstAndSecond(mapStr1, mapStr2, uniqueWordAllStrings));
+        List<String> includedInFirstAndSecond = includedInFirstAndSecond(mapStr1, mapStr2, uniqueWordAllStrings);
+        System.out.println(includedInFirstAndSecond);
+        System.out.println("Символы должны выводиться в обратном порядке");
+        Collections.reverse(includedInFirstAndSecond);
+        System.out.println(includedInFirstAndSecond);
+
         System.out.println("Слова входят в первую и не входят во вторую");
-        System.out.println(includedOnlyFirst(mapStr1, mapStr2, uniqueWordAllStrings));
-        System.out.println("Слова содержатся хотя бы в одной строке");
-        System.out.println(includedInFirstOrSecond(mapStr1, mapStr2, uniqueWordAllStrings));
+        List<String> includedOnlyFirst = includedOnlyFirst(mapStr1, mapStr2, uniqueWordAllStrings);
+        System.out.println(includedOnlyFirst);
+        System.out.println("Символы должны выводиться в обратном порядке");
+        Collections.reverse(includedOnlyFirst);
+        System.out.println(includedOnlyFirst);
+
+//        System.out.println("Слова содержатся хотя бы в одной строке");
+//        System.out.println(includedInFirstOrSecond(mapStr1, mapStr2, uniqueWordAllStrings));
+//
+//        System.out.println("Символы должны выводиться в обычном порядке");
+//        //System.out.println(Collections.reverse(includedInFirstAndSecond));
+//        System.out.println("Символы должны выводиться в обратном порядке");
+//        System.out.println("Символы должны выводиться в порядке возрастания циклического сдвига влево на n разрядов хеш-функции символа");
+
     }
 
-    private static Set<String> includedInFirstAndSecond(
+    /**
+     * Получаем список, где
+     * элементы входят и в первую, и во вторую строку
+     * @param map1 - масив  с словами из первой строки
+     * @param map2 - массив по второй строке
+     * @param uniqueWord - множество уникальных элементов
+     * @return
+     */
+    private static List<String> includedInFirstAndSecond(
             Map<String, Integer> map1,
             Map<String, Integer> map2,
             Set<String> uniqueWord){
         // Создаем новый set
-        Set<String> stringSet = new HashSet<>();
+        List<String> stringSet = new ArrayList<>();
         for(String word : uniqueWord) {
             if(map1.containsKey(word) && map2.containsKey(word)) stringSet.add(word);
         }
         return stringSet;
     }
-    private static Set<String> includedOnlyFirst(
+
+    /**
+     * Получаем список, где
+     * входят в первую и не входят во вторую
+     * @param map1 - масив  с словами из первой строки
+     * @param map2 - массив по второй строке
+     * @param uniqueWord - множество уникальных элементов
+     * @return
+     */
+    private static List<String> includedOnlyFirst(
             Map<String, Integer> map1,
             Map<String, Integer> map2,
             Set<String> uniqueWord){
         // Создаем новый set
-        Set<String> stringSet = new HashSet<>();
+        List<String> stringSet = new ArrayList<>();
         for(String word : uniqueWord) {
             if(map1.containsKey(word) && !map2.containsKey(word)) stringSet.add(word);
         }
         return stringSet;
     }
 
-    private static Set<String> includedInFirstOrSecond(
+    /**
+     * Получаем список, где
+     * содержатся хотя бы в одной строке
+     * @param map1 - масив  с словами из первой строки
+     * @param map2 - массив по второй строке
+     * @param uniqueWord - множество уникальных элементов
+     * @return
+     */
+    private static List<String> includedInFirstOrSecond(
             Map<String, Integer> map1,
             Map<String, Integer> map2,
             Set<String> uniqueWord){
         // Создаем новый set
-        Set<String> stringSet = new HashSet<>();
+        List<String> stringSet = new ArrayList<>();
         for(String word : uniqueWord) {
             if(map1.containsKey(word) || map2.containsKey(word)) stringSet.add(word);
         }
