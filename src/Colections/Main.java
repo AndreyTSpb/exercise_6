@@ -10,32 +10,57 @@ public class Main {
         //Получаем списки всех слов в строках
         List<String> listStr1 = createListString(str1);
         List<String> listStr2 = createListString(str2);
-
+        System.out.println("*****");
         System.out.println("Частота повторения слов в строке 1");
         Map<String, Integer> mapStr1 = uniqueWordToList(listStr1);
         System.out.println(mapStr1);
-
+        System.out.println("*****");
         System.out.println("Частота повторения слов в строке 2");
         Map<String, Integer> mapStr2 = uniqueWordToList(listStr2);
         System.out.println(mapStr2);
-
-        System.out.println("Вывод всех уникальных слов (содержатся хотя бы в одной строке)");
+        System.out.println("*****");
+        System.out.println("Вывод всех уникальных элементов (содержатся хотя бы в одной строке)");
         Set<String> uniqueWordAllStrings = uniqueWordAllStrings();
         System.out.println(uniqueWordAllStrings);
+        System.out.println("*****");
+        System.out.println("Входят и в первую, и во вторую строку");
+        viewConsoleQueueFIFO(includedInFirstAndSecondDeque(mapStr1, mapStr2, uniqueWordAllStrings));
+        System.out.println("Должны выводиться в обратном порядке");
+        viewConsoleQueueLIFO(includedInFirstAndSecondDeque(mapStr1, mapStr2, uniqueWordAllStrings));
+        System.out.println("*****");
+        System.out.println("Входят в первую и не входят во вторую:");
+        viewConsoleQueueFIFO(includedOnlyFirstDeque(mapStr1, mapStr2, uniqueWordAllStrings));
+        System.out.println("Должны выводиться в обратном порядке:");
+        viewConsoleQueueLIFO(includedOnlyFirstDeque(mapStr1, mapStr2, uniqueWordAllStrings));
 
-        System.out.println("Слова входят и в первую, и во вторую строку");
-        List<String> includedInFirstAndSecond = includedInFirstAndSecond(mapStr1, mapStr2, uniqueWordAllStrings);
-        System.out.println(includedInFirstAndSecond);
-        System.out.println("Символы должны выводиться в обратном порядке");
-        Collections.reverse(includedInFirstAndSecond);
-        System.out.println(includedInFirstAndSecond);
+        List<String> list = Arrays.asList("a", "b", "c", "d", "e");
+        System.out.println(list);
 
-        System.out.println("Слова входят в первую и не входят во вторую");
-        List<String> includedOnlyFirst = includedOnlyFirst(mapStr1, mapStr2, uniqueWordAllStrings);
-        System.out.println(includedOnlyFirst);
-        System.out.println("Символы должны выводиться в обратном порядке");
-        Collections.reverse(includedOnlyFirst);
-        System.out.println(includedOnlyFirst);
+        Collections.rotate(list, 2);
+        System.out.println(list);
+
+        Collections.reverse(list);
+        System.out.println(list);
+
+        int hash = 7;
+        for (int i = 0; i < list.size(); i++) {
+            hash = hash*31 + "javaty".charAt(i);
+            System.out.println(hash);
+        }
+
+        Set<String> srs = new HashSet<>();
+        srs.addAll(includedOnlyFirstDeque(mapStr1, mapStr2, uniqueWordAllStrings));
+        System.out.println(srs);
+        for(String word : srs) {
+            System.out.println(word.hashCode());
+        }
+
+        for(String word : srs) {
+            System.out.println(word.hashCode());
+        }
+
+        Collections.rotate(list, -2);
+        System.out.println(list);
 
 //        System.out.println("Слова содержатся хотя бы в одной строке");
 //        System.out.println(includedInFirstOrSecond(mapStr1, mapStr2, uniqueWordAllStrings));
@@ -105,6 +130,84 @@ public class Main {
             if(map1.containsKey(word) || map2.containsKey(word)) stringSet.add(word);
         }
         return stringSet;
+    }
+
+    /**
+     * Выводит элементы очереди в обратном порядке
+     * @param queue
+     */
+    private static void viewConsoleQueueLIFO(Deque queue){
+        while (!queue.isEmpty()) {
+            System.out.println(queue.pollLast());
+        }
+    }
+    /**
+     * Выводит элементы очереди в прямом порядке
+     * @param queue
+     */
+    private static void viewConsoleQueueFIFO(Deque queue){
+        while (!queue.isEmpty()) {
+            System.out.println(queue.pop());
+        }
+    }
+    /**
+     * Очередь , где
+     * элементы входят и в первую, и во вторую строку
+     * @param map1
+     * @param map2
+     * @param uniqueWord
+     * @return
+     */
+    private static Deque<String> includedInFirstAndSecondDeque(
+            Map<String, Integer> map1,
+            Map<String, Integer> map2,
+            Set<String> uniqueWord){
+        // Создаем новый set
+        Deque<String> stringSet = new ArrayDeque<>();
+        for(String word : uniqueWord) {
+            if(map1.containsKey(word) && map2.containsKey(word)) stringSet.push(word);
+        }
+        return stringSet;
+    }
+
+    /**
+     * Очередь , где
+     * входят в первую и не входят во вторую
+     * @param map1 - масив  с словами из первой строки
+     * @param map2 - массив по второй строке
+     * @param uniqueWord - множество уникальных элементов
+     * @return
+     */
+    private static Deque<String> includedOnlyFirstDeque(
+            Map<String, Integer> map1,
+            Map<String, Integer> map2,
+            Set<String> uniqueWord){
+        // Создаем новый set
+        Deque<String> deque = new ArrayDeque<>();
+        for(String word : uniqueWord) {
+            if(map1.containsKey(word) && !map2.containsKey(word)) deque.push(word);
+        }
+        return deque;
+    }
+
+    /**
+     * ПОчередь , где
+     * содержатся хотя бы в одной строке
+     * @param map1 - масив  с словами из первой строки
+     * @param map2 - массив по второй строке
+     * @param uniqueWord - множество уникальных элементов
+     * @return
+     */
+    private static Deque<String> includedInFirstOrSecondDeque(
+            Map<String, Integer> map1,
+            Map<String, Integer> map2,
+            Set<String> uniqueWord){
+        // Создаем новый set
+        Deque<String> deque = new ArrayDeque<>();
+        for(String word : uniqueWord) {
+            if(map1.containsKey(word) || map2.containsKey(word)) deque.push(word);
+        }
+        return deque;
     }
 
     /**
