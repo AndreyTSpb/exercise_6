@@ -24,52 +24,22 @@ public class Main {
         System.out.println(uniqueWordAllStrings);
         System.out.println("*****");
         System.out.println("Входят и в первую, и во вторую строку");
-        viewConsoleQueueFIFO(includedInFirstAndSecondDeque(mapStr1, mapStr2, uniqueWordAllStrings));
-        System.out.println("Должны выводиться в обратном порядке");
-        viewConsoleQueueLIFO(includedInFirstAndSecondDeque(mapStr1, mapStr2, uniqueWordAllStrings));
+        List<String> list1 = includedInFirstAndSecond(mapStr1, mapStr2, uniqueWordAllStrings);
+        viewConsoleListFIFO(list1);
+        viewConsoleListLIFO(list1);
+        viewConsoleListShiftLeft(list1, (int)(Math.random()*list1.size()));
         System.out.println("*****");
         System.out.println("Входят в первую и не входят во вторую:");
-        viewConsoleQueueFIFO(includedOnlyFirstDeque(mapStr1, mapStr2, uniqueWordAllStrings));
-        System.out.println("Должны выводиться в обратном порядке:");
-        viewConsoleQueueLIFO(includedOnlyFirstDeque(mapStr1, mapStr2, uniqueWordAllStrings));
-
-        List<String> list = Arrays.asList("a", "b", "c", "d", "e");
-        System.out.println(list);
-
-        Collections.rotate(list, 2);
-        System.out.println(list);
-
-        Collections.reverse(list);
-        System.out.println(list);
-
-        int hash = 7;
-        for (int i = 0; i < list.size(); i++) {
-            hash = hash*31 + "javaty".charAt(i);
-            System.out.println(hash);
-        }
-
-        Set<String> srs = new HashSet<>();
-        srs.addAll(includedOnlyFirstDeque(mapStr1, mapStr2, uniqueWordAllStrings));
-        System.out.println(srs);
-        for(String word : srs) {
-            System.out.println(word.hashCode());
-        }
-
-        for(String word : srs) {
-            System.out.println(word.hashCode());
-        }
-
-        Collections.rotate(list, -2);
-        System.out.println(list);
-
-//        System.out.println("Слова содержатся хотя бы в одной строке");
-//        System.out.println(includedInFirstOrSecond(mapStr1, mapStr2, uniqueWordAllStrings));
-//
-//        System.out.println("Символы должны выводиться в обычном порядке");
-//        //System.out.println(Collections.reverse(includedInFirstAndSecond));
-//        System.out.println("Символы должны выводиться в обратном порядке");
-//        System.out.println("Символы должны выводиться в порядке возрастания циклического сдвига влево на n разрядов хеш-функции символа");
-
+        List<String> list2 = includedOnlyFirst(mapStr1, mapStr2, uniqueWordAllStrings);
+        viewConsoleListFIFO(list2);
+        viewConsoleListLIFO(list2);
+        viewConsoleListShiftLeft(list2, (int)(Math.random()*list2.size()));
+        System.out.println("*****");
+        System.out.println("Cодержатся хотя бы в одной строке:");
+        List<String> list3 = includedInFirstOrSecond(mapStr1, mapStr2, uniqueWordAllStrings);
+        viewConsoleListFIFO(list3);
+        viewConsoleListLIFO(list3);
+        viewConsoleListShiftLeft(list3, (int)(Math.random()*list3.size()));
     }
 
     /**
@@ -85,11 +55,11 @@ public class Main {
             Map<String, Integer> map2,
             Set<String> uniqueWord){
         // Создаем новый set
-        List<String> stringSet = new ArrayList<>();
+        List<String> stringList = new ArrayList<>();
         for(String word : uniqueWord) {
-            if(map1.containsKey(word) && map2.containsKey(word)) stringSet.add(word);
+            if(map1.containsKey(word) && map2.containsKey(word)) stringList.add(word);
         }
-        return stringSet;
+        return stringList;
     }
 
     /**
@@ -105,11 +75,11 @@ public class Main {
             Map<String, Integer> map2,
             Set<String> uniqueWord){
         // Создаем новый set
-        List<String> stringSet = new ArrayList<>();
+        List<String> stringList = new ArrayList<>();
         for(String word : uniqueWord) {
-            if(map1.containsKey(word) && !map2.containsKey(word)) stringSet.add(word);
+            if(map1.containsKey(word) && !map2.containsKey(word)) stringList.add(word);
         }
-        return stringSet;
+        return stringList;
     }
 
     /**
@@ -125,11 +95,48 @@ public class Main {
             Map<String, Integer> map2,
             Set<String> uniqueWord){
         // Создаем новый set
-        List<String> stringSet = new ArrayList<>();
+        List<String> stringList = new ArrayList<>();
         for(String word : uniqueWord) {
-            if(map1.containsKey(word) || map2.containsKey(word)) stringSet.add(word);
+            if(map1.containsKey(word) || map2.containsKey(word)) stringList.add(word);
         }
-        return stringSet;
+        return stringList;
+    }
+    /**
+     * Выводит элементы Списка в обратном порядке
+     * @param list
+     */
+    private static void viewConsoleListLIFO(List<String> list){
+        System.out.println("Должны выводиться в обратном порядке");
+        //Используем статдартный метод для разворота колекции
+        Collections.reverse(list);
+        for(String item : list) {
+            System.out.println(item);
+        }
+    }
+    /**
+     * Выводит элементы списка в прямом порядке
+     * @param list
+     */
+    private static void viewConsoleListFIFO(List<String> list){
+        System.out.println("Должны выводиться в обычном порядке");
+        for(String item : list) {
+            System.out.println(item);
+        }
+    }
+    /**
+     * Выводит элементы списка отсортированные по возрастанию
+     * c циклическим сдвигом в лево на N
+     * @param list
+     */
+    private static void viewConsoleListShiftLeft(List<String> list, Integer n){
+        System.out.println(n);
+        Collections.sort(list); //отсортируем в порядке возрастания
+        System.out.println(list);
+        Collections.rotate(list, -n); //стандартный метод сдвига
+        System.out.println("Должны выводиться в порядке возрастания циклического сдвига влево на n разрядов");
+        for(String item : list) {
+            System.out.println(item);
+        }
     }
 
     /**
